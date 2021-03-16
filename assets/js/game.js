@@ -18,7 +18,7 @@ var fight = function(enemyName) {
             var confirmSkip = window.confirm("Are you sure you'd like to quit?");
             if (confirmSkip) {
                 window.alert(playerName + " has decided to skip this fight. Goodbye!");
-                playerMoney = playerMoney - 10;
+                playerMoney = Math.max(0, playerMoney - 10);
                 console.log("playerMoney", playerMoney);
                 break;
             }
@@ -28,8 +28,10 @@ var fight = function(enemyName) {
         }
         //wrapping all in if statement for promptFight
         if (promptFight === "fight" || promptFight === "FIGHT") {
+            //generate random damage value based on players attack power
+            var damage = randomNumber(playerAttack - 3, playerAttack)
             //subtract value of Player attack from enemyHealth
-            enemyHealth = enemyHealth - playerAttack;
+            enemyHealth = Math.max(0, enemyHealth - damage);
             //log resulting message in console
             console.log(
                 playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining."
@@ -43,8 +45,10 @@ var fight = function(enemyName) {
             else {
                 window.alert(enemyName + " still has " + enemyHealth + " health left.");
             }
+            //generate random damage value based on attack power
+            var damage = randomNumber(playerAttack - 3, playerAttack);
             //subtract enemyAttack from playerHealth
-            playerHealth = playerHealth - enemyAttack;
+            playerHealth = Math.max(0, playerHealth - damage);
             //log result in console
             console.log(enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining.");
             //check if our robot is still alive
@@ -76,7 +80,7 @@ var startGame = function() {
             //pick new enemy to fight based on index of enemyNames array
             var pickedEnemyName = enemyNames[i];
             //reset enemyHealth before starting new fight
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
             //passed pickedEnemyName variable through the fight function
             fight(pickedEnemyName);
             // if were not at the last enemy in the array nad player is still alive
@@ -161,5 +165,10 @@ var shop = function() {
             break;
     }
 }
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+    return value;
+};
 //start the game when the page loads/calls startGame function
 startGame();
